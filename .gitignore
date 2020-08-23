@@ -4,6 +4,7 @@ public/*
 
 # Files
 .DS_Store
+.env.json
 
 # Editor directories and files
 .idea

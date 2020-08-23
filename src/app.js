@@ -2,8 +2,13 @@ const createError = require('http-errors')
 const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
+const session = require('express-session')
 const logger = require('morgan')
-const { ENDPOINT_VERSION } = require('./constants/routes')
+const {
+  ENDPOINT_VERSION,
+  SESSION_SECRET,
+  COOKIE_MAX_AGE
+} = require('./constants/routes')
 
 const usersRouter = require('./routes/users')
 
@@ -18,6 +23,17 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, '../public')))
+app.use(
+  session({
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: true,
+      maxAge: COOKIE_MAX_AGE
+    }
+  })
+)
 
 app.use('/api/'.concat(ENDPOINT_VERSION, '/users'), usersRouter)
 
